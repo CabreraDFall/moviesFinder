@@ -13,6 +13,7 @@ import {
 } from "react-native-heroicons/outline";
 import TrendingMovies from "../components/trendingMovies";
 import { useState } from "react";
+import MovieList from "../components/movieList";
 
 const ios = Platform.OS == "ios";
 
@@ -54,6 +55,8 @@ const HomeScreen = () => {
         "https://cdn.dribbble.com/users/3281732/screenshots/13661330/media/1d9d3cd01504fa3f5ae5016e5ec3a313.jpg?compress=1&resize=1200x1200",
     },
   ]);
+  const [upcoming, setUpcoming] = useState([1, 2, 3]);
+  const [topRated, setTopRated] = useState([1, 2, 3]);
   return (
     <View className="flex-1 bg-neutral-800">
       <SafeAreaView className={ios ? "-mb-2" : "mb-3"}>
@@ -73,6 +76,7 @@ const HomeScreen = () => {
       >
         {/* <TrendingMovies data={trending} /> */}
         <TrendingMovies data={trending} />
+        <MovieList title="Upcoming" data={upcoming} />
       </ScrollView>
     </View>
   );
