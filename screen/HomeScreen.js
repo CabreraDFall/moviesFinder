@@ -13,7 +13,6 @@ import {
 } from "react-native-heroicons/outline";
 import TrendingMovies from "../components/trendingMovies";
 import { useState } from "react";
-import Show from "../components/Show";
 
 const ios = Platform.OS == "ios";
 

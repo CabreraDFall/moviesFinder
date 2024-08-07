@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
 import {
   StatusBar,
@@ -19,10 +20,12 @@ const ITEM_SIZE = Platform.OS === "ios" ? width * 0.62 : width * 0.64;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 const BACKDROP_HEIGHT = height * 0.65;
 
-export default function App({ data }) {
+export default function TrendingMovies({ data }) {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
-  // Agregar elementos vacíos al inicio y al final del array data
+  const navigation = useNavigation();
+
+  // Adding empty items to the start and end of the data array
   const dataWithEmptyItems = [
     { key: "empty-left" },
     ...data,
@@ -31,10 +34,12 @@ export default function App({ data }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Trending Movies</Text>
+
       <Animated.FlatList
         showsHorizontalScrollIndicator={false}
         data={dataWithEmptyItems}
-        keyExtractor={(item) => item.key || item.id} // Asegurarse de que el key sea único
+        keyExtractor={(item) => item.key || item.id.toString()} // Ensure the key is unique
         horizontal
         bounces={false}
         decelerationRate={Platform.OS === "ios" ? 0 : 0.98}
@@ -48,7 +53,7 @@ export default function App({ data }) {
         )}
         scrollEventThrottle={16}
         renderItem={({ item, index }) => {
-          // Si el elemento es uno de los elementos vacíos, devolver una vista vacía con el tamaño correspondiente
+          // If the item is one of the empty items, return an empty view with the corresponding size
           if (!item.poster) {
             return (
               <View
@@ -75,22 +80,29 @@ export default function App({ data }) {
             outputRange: [0.65, 1, 0.5],
             extrapolate: "clamp",
           });
+
+          const handleClick = () => {
+            navigation.navigate("Movie", item);
+          };
+
           return (
             <View style={{ width: ITEM_SIZE }}>
-              <Animated.View
-                style={{
-                  marginHorizontal: SPACING,
-                  marginTop: 25,
-                  alignItems: "center",
-                  transform: [{ translateY }],
-                  opacity,
-                }}
-              >
-                <Image
-                  source={{ uri: item.poster }}
-                  style={styles.posterImage}
-                />
-              </Animated.View>
+              <TouchableOpacity onPress={handleClick}>
+                <Animated.View
+                  style={{
+                    marginHorizontal: SPACING,
+                    marginTop: 25,
+                    alignItems: "center",
+                    transform: [{ translateY }],
+                    opacity,
+                  }}
+                >
+                  <Image
+                    source={{ uri: item.poster }}
+                    style={styles.posterImage}
+                  />
+                </Animated.View>
+              </TouchableOpacity>
             </View>
           );
         }}
@@ -100,13 +112,14 @@ export default function App({ data }) {
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   container: {
     flex: 1,
+  },
+  title: {
+    color: "white",
+    fontSize: 24,
+    marginHorizontal: 16,
+    marginBottom: 20,
   },
   posterImage: {
     width: "100%",
