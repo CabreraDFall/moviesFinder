@@ -14,6 +14,7 @@ import {
 import TrendingMovies from "../components/trendingMovies";
 import { useState } from "react";
 import MovieList from "../components/movieList";
+import { useNavigation } from "@react-navigation/native";
 
 const ios = Platform.OS == "ios";
 
@@ -57,6 +58,7 @@ const HomeScreen = () => {
   ]);
   const [upcoming, setUpcoming] = useState([1, 2, 3]);
   const [topRated, setTopRated] = useState([1, 2, 3]);
+  const navegation = useNavigation();
   return (
     <View className="flex-1 bg-neutral-800">
       <SafeAreaView className={ios ? "-mb-2" : "mb-3"}>
@@ -65,7 +67,7 @@ const HomeScreen = () => {
           <Bars3CenterLeftIcon size="30" strokeWidth={2} color="white" />
           <Text className="text-white text-2xl font-bold">Movies</Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navegation.navigate("Search")}>
             <MagnifyingGlassIcon size="24" strokeWidth={2} color="white" />
           </TouchableOpacity>
         </View>
