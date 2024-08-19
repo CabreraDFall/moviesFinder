@@ -12,13 +12,16 @@ import {
 } from "react-native";
 import { XMarkIcon } from "react-native-heroicons/solid";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Loading from "../components/loading";
 
 const { width, height } = Dimensions.get("window");
 
 const SearchScreen = () => {
   const navigation = useNavigation();
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
   let moviesName = "Ant-Man and then wasp: Quatumania";
+
   return (
     <SafeAreaView className="bg-neutral-800 flex-1">
       <View className="mx-4 mb-3 flex-row justify-between items-center border border-neutral-500 rounded-lg">
@@ -26,7 +29,7 @@ const SearchScreen = () => {
           placeholder="Search Movie"
           placeholderTextColor={"lightgray"}
           className="pb-1 pl-6 flex-1 text-base font-semibold text-white tracking-wider"
-        ></TextInput>
+        />
         <TouchableOpacity
           onPress={() => navigation.navigate("Home")}
           className="rounded-lg p-3 m-1 bg-neutral-500"
@@ -34,7 +37,9 @@ const SearchScreen = () => {
           <XMarkIcon size="25" color="white" />
         </TouchableOpacity>
       </View>
-      {results.length > 0 ? (
+      {loading ? (
+        <Loading />
+      ) : results.length > 0 ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 15 }}
@@ -70,7 +75,7 @@ const SearchScreen = () => {
         </ScrollView>
       ) : (
         <View className="items-center">
-          <Text className="text-base text-white">No movie find</Text>
+          <Text className="text-base text-white">No movie found</Text>
         </View>
       )}
     </SafeAreaView>
