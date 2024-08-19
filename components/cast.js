@@ -5,7 +5,6 @@ const Cast = ({ cast, navigation }) => {
   let characterName = "John Wick";
   return (
     <View className="my-6">
-      {console.log(navigation)}
       <Text className="text-white text-lg mx-4 mb-5">Top Cast</Text>
       <ScrollView
         horizontal
