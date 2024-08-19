@@ -1,10 +1,11 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-const Cast = ({ cast, navegation }) => {
+const Cast = ({ cast, navigation }) => {
   let personName = "Keanu Reevis";
   let characterName = "John Wick";
   return (
     <View className="my-6">
+      {console.log(navigation)}
       <Text className="text-white text-lg mx-4 mb-5">Top Cast</Text>
       <ScrollView
         horizontal
@@ -17,7 +18,7 @@ const Cast = ({ cast, navegation }) => {
               <TouchableOpacity
                 key={index}
                 className="mr-4 items-center"
-                onPress={() => navegation.push("person", person)}
+                onPress={() => navigation.navigate("Person", person)}
               >
                 <View className="overflow-hidden border rounded-md  border-neutral-500 ">
                   <Image
