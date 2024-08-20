@@ -17,6 +17,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import Cast from "../components/cast";
 import MovieList from "../components/movieList";
 import Loading from "../components/loading";
+import {
+  fallbackMoviePoster,
+  fetchMovieCredits,
+  fetchMoviesDetails,
+  fetchSimilarMovies,
+  image500,
+} from "../api/moviedb";
 
 const { width, height } = Dimensions.get("window");
 const ios = Platform.OS == "ios";
@@ -26,14 +33,34 @@ const MovieScreen = () => {
   const { params: item } = useRoute();
   const navigation = useNavigation();
   const [isFavourite, setIsFavourite] = useState(false);
-  const [cast, setCast] = useState([1, 2, 3, 4, 5]);
-  const [similiarMovies, setSimiliarMovies] = useState([1, 2, 3, 4, 5]);
+  const [cast, setCast] = useState([]);
+  const [similiarMovies, setSimiliarMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [movie, setMovie] = useState({});
+
   let moviesName = "Ant-Man and then wasp: Quatumania";
 
   useEffect(() => {
-    //call API
+    setLoading(true);
+    getMovieDetails(item.id);
+    getCredits(item.id);
+    getSimilarMovies(item.id);
   }, [item]);
+
+  const getMovieDetails = async (id) => {
+    const data = await fetchMoviesDetails(id);
+    if (data) setMovie(data);
+    setLoading(false);
+  };
+
+  const getCredits = async (id) => {
+    const data = await fetchMovieCredits(id);
+    if (data && data.cast) setCast(data.cast);
+  };
+  const getSimilarMovies = async (id) => {
+    const data = await fetchSimilarMovies(id);
+    if (data && data.results) setSimiliarMovies(data.results);
+  };
 
   return (
     <ScrollView
@@ -70,7 +97,7 @@ const MovieScreen = () => {
             <View>
               <Image
                 source={{
-                  uri: "https://cdn.dribbble.com/users/3281732/screenshots/11192830/media/7690704fa8f0566d572a085637dd1eee.jpg?compress=1&resize=1200x1200",
+                  uri: image500(movie?.poster_path || fallbackMoviePoster),
                 }}
                 style={{ width, height: height * 0.55 }}
               />
@@ -88,28 +115,31 @@ const MovieScreen = () => {
             </View>
             <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
               <Text className="text-white text-center text-3xl font-old tracking-wider">
-                {moviesName}
+                {movie?.title}
               </Text>
-              <Text className="text-neutral-400 font-semibold text-base text-center">
-                Released • 2020 • 170 min
-              </Text>
+              {movie?.id ? (
+                <Text className="text-neutral-400 font-semibold text-base text-center">
+                  {movie?.status} • {movie?.release_date?.split("-")[0]} •{" "}
+                  {movie?.runtime} min
+                </Text>
+              ) : null}
+
               <View className="flex-row justify-center mx-4 space-x-2">
-                <Text className="text-neutral-400 font-semibold text-base text-center">
-                  Action •
-                </Text>
-                <Text className="text-neutral-400 font-semibold text-base text-center">
-                  Thrill •
-                </Text>
-                <Text className="text-neutral-400 font-semibold text-base text-center">
-                  Comedy
-                </Text>
+                {movie?.genres?.map((genre, index) => {
+                  let showDot = index + 1 != movie.genres.length;
+                  return (
+                    <Text
+                      key={index}
+                      className="text-neutral-400 font-semibold text-base text-center"
+                    >
+                      {genre?.name} {showDot ? "•" : null}
+                    </Text>
+                  );
+                })}
               </View>
 
               <Text className="text-neutral-400 mx-4 tracking-wide">
-                Scott Lang vuelve a enfundarse el traje de Ant-Man para pelear
-                codo con codo junto a la Avispa. La misión revelará a los dos
-                superhéroes un secreto terrible y los enfrentará a su enemigo
-                más poderoso.
+                {movie?.overview}
               </Text>
               <Cast navigation={navigation} cast={cast} />
               <MovieList

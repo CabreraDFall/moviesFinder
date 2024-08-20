@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { styles } from "../theme";
 import { useNavigation } from "@react-navigation/native";
+import { fallbackMoviePoster, image185 } from "../api/moviedb";
 
 const { width, height } = Dimensions.get("window");
 
@@ -42,14 +43,14 @@ const MovieList = ({ title, data, hideSeeAll }) => {
               <View className="space-y-1 mr-4 ">
                 <Image
                   source={{
-                    uri: "https://cdn.dribbble.com/users/3281732/screenshots/11192830/media/7690704fa8f0566d572a085637dd1eee.jpg?compress=1&resize=1200x1200",
+                    uri: image185(item.poster_path || fallbackMoviePoster),
                   }}
                   style={style.image}
                 />
                 <Text className="text-neutral-300 ml-1">
-                  {moviesName.length > 14
-                    ? moviesName.slice(0, 14) + "..."
-                    : moviesName}
+                  {item.title.length > 14
+                    ? item.title.slice(0, 14) + "..."
+                    : item.title}
                 </Text>
               </View>
             </TouchableWithoutFeedback>

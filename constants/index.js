@@ -1,4 +1,6 @@
-export const apiKey = "be45496ccb1c19369ff8f26916b37ad7";
+import { API_KEY } from "@env";
+
+export const apiKey = API_KEY;
 
 export const moviesData = [
   { id: 2, title: "Ant-man and the wasp: Quantumania" },

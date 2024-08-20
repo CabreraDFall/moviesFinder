@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
+import { image500 } from "../api/moviedb";
 
 const { width, height } = Dimensions.get("window");
 
@@ -54,7 +55,7 @@ export default function TrendingMovies({ data }) {
         scrollEventThrottle={16}
         renderItem={({ item, index }) => {
           // If the item is one of the empty items, return an empty view with the corresponding size
-          if (!item.poster) {
+          if (!item.poster_path) {
             return (
               <View
                 style={{
@@ -63,7 +64,6 @@ export default function TrendingMovies({ data }) {
               />
             );
           }
-
           const inputRange = [
             (index - 2) * ITEM_SIZE,
             (index - 1) * ITEM_SIZE,
@@ -98,7 +98,7 @@ export default function TrendingMovies({ data }) {
                   }}
                 >
                   <Image
-                    source={{ uri: item.poster }}
+                    source={{ uri: image500(item.poster_path) }}
                     style={styles.posterImage}
                   />
                 </Animated.View>
