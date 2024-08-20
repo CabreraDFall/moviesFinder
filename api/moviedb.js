@@ -6,6 +6,7 @@ const apiBaseUrl = `https://api.themoviedb.org/3`;
 const trendingMoviesEndpoint = `${apiBaseUrl}/trending/movie/day?api_key=${apiKey}`;
 const upcomingMoviesEndPoint = `${apiBaseUrl}/movie/upcoming?api_key=${apiKey}`;
 const topRatedMoviesEndPoint = `${apiBaseUrl}/movie/top_rated?api_key=${apiKey}`;
+const searchMoviesEndpoint = `${apiBaseUrl}/search/movie?api_key=${apiKey}`;
 
 // dynamic endpoints
 
@@ -34,11 +35,11 @@ export const fallbackMoviePoster = `https://cdn.dribbble.com/users/3281732/scree
 // Fallback image URL for person posters
 export const fallbackPersonPoster = `https://cdn.dribbble.com/users/3281732/screenshots/11192830/media/7690704fa8f0566d572a085637dd1eee.jpg?compress=1&resize=1200x1200`;
 
-const apiCall = async (endpoint, params) => {
+const apiCall = async (endpoint, params = {}) => {
   const options = {
     method: "get",
     url: endpoint,
-    params: params ? param : {},
+    params: params ? params : {},
   };
 
   try {
@@ -78,4 +79,8 @@ export const fetchPersonDetails = (id) => {
 
 export const fetchPersonMovies = (id) => {
   return apiCall(personMoviesEndpoint(id));
+};
+
+export const searchMovies = (params) => {
+  return apiCall(searchMoviesEndpoint, params);
 };
